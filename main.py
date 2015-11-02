@@ -88,6 +88,19 @@ def rpi_board_revision():
 	retvalue = revision_array['TYPE']+' Rev:'+str(revision_array['P1_REVISION'])
 	return(retvalue)
 	
+def gpio_read():
+	GPIO.setmode(GPIO.BCM)
+	retvalue = 'gpio:'
+	a = [17,18,21,22,23,24,25,4]
+	for i in range(len(a)):
+		GPIO.setup(a[i], GPIO.IN)
+	delay = .5
+	for i in range(len(a)):
+#		time.sleep(delay)
+		retvalue = retvalue+str(GPIO.input(a[i]))
+#	print 'gpio:', retvalue
+	return(retvalue)
+	
 def displaystart():
 	'''The main loop for polling mpc for information and putting onto the OLED.'''
 	logging.info("displaystart")
@@ -101,10 +114,10 @@ def displaystart():
 		timerow = 4
 	else:
 		timerow = 2
-	row[1] = "Future Display v1.1"+BLANK
+	row[1] = "Future v1.1"+BLANK
 	row[2] = "Set for "+str(ROWS)+" rows."+BLANK
 	row[3] = rpi_board_revision()
-	row[4] = BLANK
+	row[4] = gpio_read()
 	updatedisplay()
 	time.sleep(5)
 
@@ -149,9 +162,9 @@ if __name__ == "__main__":
 	logging.warning(datetime.datetime.now().strftime('%d %b %H:%M')+". Running display.py as a standalone app")
 	logging.warning("Use -v command line option to increase logging.")
 
-	print "Running display.py as a standalone app"
+	print "Running main.py as a standalone app"
 	logging.info("OLED rows="+str(ROWS))
-	time.sleep(3)			# make sure everything is running first
+	time.sleep(2)			# make sure everything is running first
 	myOled=oled.oled(ROWS)
 	displaystart()
 	
