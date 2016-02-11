@@ -117,9 +117,10 @@ def displaystart():
 	row[1] = "Future v1.1"+BLANK
 	row[2] = "Set for "+str(ROWS)+" rows."+BLANK
 	row[3] = rpi_board_revision()
-	row[4] = gpio_read()
-	updatedisplay()
-	time.sleep(5)
+	while True:
+		row[4] = gpio_read()
+		updatedisplay()
+		time.sleep(2)
 
 	while True:
 		try:
